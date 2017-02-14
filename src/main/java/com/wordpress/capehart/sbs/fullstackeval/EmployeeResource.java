@@ -82,7 +82,7 @@ public class EmployeeResource {
 	    	MongoDatabase db = mongoClient.getDatabase("sbs");
 	    	MongoCollection<Document> employeesDBCollection = db.getCollection("employees");
 	    	
-	    	return employeesDBCollection.find(eq("First Name", id)).first().
+	    	return employeesDBCollection.find(eq("_id", new ObjectId(id))).first().
 	    			toJson(new JsonWriterSettings(JsonMode.STRICT));
     	}
     }
