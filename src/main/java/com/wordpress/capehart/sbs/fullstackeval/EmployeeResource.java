@@ -103,5 +103,19 @@ public class EmployeeResource {
     	}
     }
     
+    @POST
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateEmployee(@PathParam("id") String id, String newEmployee) {
+    	// TODO: Make this get the DB host and port from a config file
+    	try(MongoClient mongoClient = new MongoClient()) {
+    		MongoDatabase db = mongoClient.getDatabase("sbs");
+	    	MongoCollection<Document> employeesDBCollection = db.getCollection("employees");
+
+	    	Document newEmployeeDoc = Document.parse(newEmployee);
+	    	employeesDBCollection.replaceOne(eq("_id", new ObjectId(id)), newEmployeeDoc);
+    	}
+    }
+    
     // TODO: Validate employee JSON before pushing it to the database
 }
