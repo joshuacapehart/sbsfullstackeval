@@ -3,6 +3,7 @@ package com.wordpress.capehart.sbs.fullstackeval;
 import java.net.URI;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -125,6 +126,23 @@ public class EmployeeResource {
 	    	if(updateResult.getModifiedCount() < 1) {
 	    		throw new WebApplicationException(Response.Status.NOT_MODIFIED);
 	    	}
+    	}
+    }
+    
+    @DELETE
+    @Path("{id}")
+    public void deleteEmployee(@PathParam("id") String id) {
+    	// TODO: Make this get the DB host and port from a config file
+    	try(MongoClient mongoClient = new MongoClient()) {
+    		MongoDatabase db = mongoClient.getDatabase("sbs");
+	    	MongoCollection<Document> employeesDBCollection = db.getCollection("employees");
+	    	
+	    	Document employee = employeesDBCollection.find(eq("_id", new ObjectId(id))).first();
+	    	if(employee == null) {
+	    		throw new WebApplicationException(Response.Status.NOT_FOUND);
+	    	}
+	    	
+	    	employeesDBCollection.deleteOne(eq("_id", new ObjectId(id)));
     	}
     }
     
