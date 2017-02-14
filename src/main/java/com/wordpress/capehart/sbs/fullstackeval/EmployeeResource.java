@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import org.bson.Document;
 import org.bson.json.JsonMode;
 import org.bson.json.JsonWriterSettings;
+import org.bson.types.ObjectId;
 
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -72,12 +73,6 @@ public class EmployeeResource {
     	return empsJson.toString();
 	}
 	
-    /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "application/json" media type.
-     *
-     * @return String that will be returned as a application/json response.
-     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -102,9 +97,10 @@ public class EmployeeResource {
 	    	
 	    	Document doc = Document.parse(arg);
 	    	employeesDBCollection.insertOne(doc);
+	    	
+	    	ObjectId newEmployeeID = (ObjectId)doc.get("_id");
+			return Response.created(URI.create("/employees/" + newEmployeeID.toHexString())).build();
     	}
-    	
-		return Response.created(URI.create("/employees")).build();
     }
     
     // TODO: Validate employee JSON before pushing it to the database
