@@ -39,18 +39,7 @@ public class EmployeeResource {
 	    	MongoCursor<Document> employeeCursor = employeesDBCollection.find().
 	    			projection(fields(include("FirstName", "LastName", "Position", "Active"))).iterator();
 
-	    	final StringBuilder empsJson = new StringBuilder("{\"employees\": [");
-	    	
-	    	if(employeeCursor.hasNext()) {
-	    		empsJson.append(employeeCursor.next().toJson());
-	    	}
-	    	while(employeeCursor.hasNext()) {
-	    		empsJson.append(", " + employeeCursor.next().toJson());
-	    	}
-	    	
-	    	empsJson.append("]}");
-	    	
-	    	return empsJson.toString();
+	    	return buildEmployeesString(employeeCursor);
     	}
 	}
 	
@@ -63,20 +52,24 @@ public class EmployeeResource {
 	    	MongoCollection<Document> employeesDBCollection = db.getCollection("employees");
 	    	
 	    	MongoCursor<Document> employeeCursor = employeesDBCollection.find().iterator();
-
-	    	final StringBuilder empsJson = new StringBuilder("{\"employees\": [");
 	    	
-	    	if(employeeCursor.hasNext()) {
-	    		empsJson.append(employeeCursor.next().toJson());
-	    	}
-	    	while(employeeCursor.hasNext()) {
-	    		empsJson.append(", " + employeeCursor.next().toJson());
-	    	}
-	    	
-	    	empsJson.append("]}");
-	    	
-	    	return empsJson.toString();
+	    	return buildEmployeesString(employeeCursor);
     	}
+	}
+	
+	private String buildEmployeesString(MongoCursor<Document> employeeCursor) {
+		final StringBuilder empsJson = new StringBuilder("{\"employees\": [");
+    	
+    	if(employeeCursor.hasNext()) {
+    		empsJson.append(employeeCursor.next().toJson());
+    	}
+    	while(employeeCursor.hasNext()) {
+    		empsJson.append(", " + employeeCursor.next().toJson());
+    	}
+    	
+    	empsJson.append("]}");
+    	
+    	return empsJson.toString();
 	}
 	
     /**
