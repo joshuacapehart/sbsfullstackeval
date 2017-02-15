@@ -13,6 +13,9 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Employee Records</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/employees/*</url-pattern>
     </servlet-mapping>
+    <welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
 </web-app>

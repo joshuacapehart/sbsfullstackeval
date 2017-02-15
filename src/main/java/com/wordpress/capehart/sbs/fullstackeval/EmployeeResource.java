@@ -27,7 +27,7 @@ import com.mongodb.client.result.UpdateResult;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 
-@Path("employees")
+@Path("")
 public class EmployeeResource {
 
 	@GET
